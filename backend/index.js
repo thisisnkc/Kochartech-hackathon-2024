@@ -4,12 +4,14 @@ const {Role} = require("@prisma/client");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const cors = require("cors");
 
 const app = express();
 const prisma = new PrismaClient();
 const PORT = 3000;
 
 // Middleware to parse JSON
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 // Test Route
@@ -54,6 +56,42 @@ app.post("/api/users/add", async (req, res) => {
     });
 
     return res.status(201).json(newUser);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Failed to create user" });
+  }
+});
+
+app.get("/users", async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+
+// API to create a new user
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if ( !email || !password ) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+
+    if (!existingUser) {
+      console.log('unknown user');
+      return res.status(400).json({ error: "unknown user" });
+    }
+    
+    
+    return res.status(200).json({
+      existingUser
+    })
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ error: "Failed to create user" });
