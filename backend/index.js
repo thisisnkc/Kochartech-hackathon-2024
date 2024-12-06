@@ -84,7 +84,6 @@ app.post("/login", async (req, res) => {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (!existingUser) {
-      console.log('unknown user');
       return res.status(400).json({ error: "unknown user" });
     }
     

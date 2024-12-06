@@ -1,19 +1,45 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 const AddTask = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
-  const [assignedTo, setAssignedTo] = useState("");
+  const [userToAssign, setUserToAssign] = useState({});
+  const [workers, setWorkers] = useState([]);
   const [status, setStatus] = useState("PENDING");
-  const createdBy = localStorage.getItem("name"); // Fetching createdBy from localStorage
+
+  const user = useRef([]);
+
+  const getWorkers = useCallback(async () => {
+    const users = await fetch("http://localhost:3000/users");
+    const usersData = await users.json();
+
+    console.log('users data',usersData);
+
+     const user = usersData.filter(user => user.role === "WORKER");
+
+    setWorkers(user);
+  },[]) 
+
+  useEffect(() => {
+    getWorkers();
+  },[getWorkers])
 
   const handleSubmit = async () => {
-    if (!title || !description || !assignedTo || !createdBy) {
+    if (!title || !description || !userToAssign) {
       alert("Please fill all required fields!");
       return;
     }
+
+    let userInfo = localStorage.getItem("userInfo");
+
+    userInfo = JSON.parse(userInfo);
+
+
+    const assignedWorker = workers.filter(worker => worker.name === userToAssign);
+
+    
 
     try {
       const response = await fetch("http://localhost:3000/api/tasks/add", {
@@ -25,18 +51,18 @@ const AddTask = () => {
           title,
           description,
           priority,
-          assignedTo,
-          createdBy:{
-            name:"Nikhil Kumar",
-            email:"nikhil.kumar@phygital.com",
-            password:"Nik@1234",
-            id:2,
-            role:"WORKER"
-
-          },
-          status,
+          assignedTo: assignedWorker[0],
+          createdBy:userInfo,
         }),
       });
+
+      console.log('body',{
+        title,
+        description,
+        priority,
+        assignedTo: assignedWorker[0],
+        createdBy:userInfo,
+      })
 
       if (response.ok) {
         const data = await response.json();
@@ -45,7 +71,7 @@ const AddTask = () => {
         setTitle("");
         setDescription("");
         setPriority("");
-        setAssignedTo("");
+        setUserToAssign();
         setStatus("");
       } else {
         const errorData = await response.json();
@@ -80,10 +106,11 @@ const AddTask = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <FormControl fullWidth margin="normal">
+      <FormControl defaultValue="LOW" fullWidth margin="normal">
         <InputLabel>Priority</InputLabel>
         <Select
           value={priority}
+          label="Priority"
           onChange={(e) => setPriority(e.target.value)}
           variant="outlined"
         >
@@ -92,14 +119,21 @@ const AddTask = () => {
           <MenuItem value="HIGH">HIGH</MenuItem>
         </Select>
       </FormControl>
-      <TextField
-        fullWidth
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Assigned To</InputLabel>
+        <Select
         label="Assigned To"
-        variant="outlined"
-        margin="normal"
-        value={assignedTo}
-        onChange={(e) => setAssignedTo(e.target.value)}
-      />
+          value={userToAssign}
+          onChange={(e) => setUserToAssign(e.target.value)}
+          variant="outlined"
+        >
+          {workers && workers?.map((u) => (
+            <MenuItem key={u.id} value={u.name}>
+              {u.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
      
       <Button
         variant="contained"

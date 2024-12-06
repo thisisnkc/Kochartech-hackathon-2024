@@ -8,7 +8,7 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import wm from '../assets/wm.png'
+import wm from '../assets/WM.png'
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -37,9 +37,7 @@ const AdvancedLoginPage = () => {
       const data = await response.json();
       const details =data.existingUser;
       console.log(details);
-      localStorage.setItem("name",details.name);
-      localStorage.setItem("email",details.email);
-      localStorage.setItem("role",details.role);
+      localStorage.setItem('userInfo',JSON.stringify(details));
             if(details.role === "MANAGER"){
                await navigate("/dashboard");
             }
@@ -159,7 +157,7 @@ const AdvancedLoginPage = () => {
                   sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                 >
                   <TextField
-                    label="Employee ID"
+                    label="eamil"
                     variant="outlined"
                     type="email"
                     required
