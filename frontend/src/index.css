@@ -47,13 +47,12 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #010886;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -65,4 +64,28 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+.logo {
+  width: 50%;
+  margin: auto;
+  display: flex;
+}
+.input-fields {
+  color: #fff;
+}
+
+.input-fields label {
+  color: rgb(255 255 255 / 50%);
+}
+.input-fields fieldset {
+  border-color: rgb(255 255 255 / 50%);
+}
+.input-fields div {
+  border-radius: 50px;
+}
+.input-fields input {
+  color: #fff;
+}
+.submitBtn {
+  background: linear-gradient(135deg, #1b1b1bd9, #0000007a);
 }

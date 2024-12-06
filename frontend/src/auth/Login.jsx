@@ -11,6 +11,8 @@ import {
 import wm from '../assets/wm.png'
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import '../index.css';
+
 
 const AdvancedLoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -68,27 +70,27 @@ const AdvancedLoginPage = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, type: "spring" }}
           >
+            <img src={wm} alt="" className="logo" />
             <Typography
               variant="h4"
               sx={{
                 color: "#fff",
-                fontWeight: "bold",
+                fontWeight: "bold", textAlign:'center',
                 textShadow: "2px 4px 6px rgba(0,0,0,0.2)",
               }}
             >
-              <img src={wm} alt="" />
               Welcome to WorkMax
             </Typography>
-            <Typography
+            {/* <Typography
               variant="h6"
               sx={{
                 color: "#ddd",
                 marginTop: 2,
-                textShadow: "1px 2px 4px rgba(0,0,0,0.2)",
+                textShadow: "1px 2px 4px rgba(0,0,0,0.2)",  
               }}
             >
              Work Management Platform 
-            </Typography>
+            </Typography> */}
           </motion.div>
         </Grid>
 
@@ -102,14 +104,15 @@ const AdvancedLoginPage = () => {
             <Card
               sx={{
                 padding: 4,
-                borderRadius: "20px",
+                borderRadius: "35px",
                 boxShadow: "0px 15px 30px rgba(0,0,0,0.3)",
                 backdropFilter: "blur(10px)",
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                backgroundColor: "rgba(0, 0, 0, 0.23)",
+                color:'#fff'
               }}
             >
               <CardContent>
-                <Typography
+                {/* <Typography
                   variant="h4"
                   sx={{
                     textAlign: "center",
@@ -119,20 +122,22 @@ const AdvancedLoginPage = () => {
                   }}
                 >
                   Login 
-                </Typography>
+                </Typography> */}
 
                 <Box
                   component="form"
                   noValidate
                   autoComplete="off"
                   sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                >
+                > 
                   <TextField
                     label="Employee ID"
                     variant="outlined"
-                    type="email"
+                    type="text"
                     required
                     fullWidth
+                    borderRadius="50px"
+                    className="input-fields"
                   />
                   <TextField
                     label="Password"
@@ -140,6 +145,8 @@ const AdvancedLoginPage = () => {
                     type="password"
                     required
                     fullWidth
+                    className="input-fields"
+                    borderRadius="50px"
                   />
                   <motion.div
                     whileHover={{ scale: 1.05 }}
@@ -150,13 +157,16 @@ const AdvancedLoginPage = () => {
                       variant="contained"
                       color="primary"
                       fullWidth
+                      className="submitBtn"
                       onClick={handleLogin}
                       disabled={loading}
                       sx={{
                         height: "50px",
-                        fontWeight: "bold",
                         textTransform: "uppercase",
                         fontSize: "16px",
+                        borderRadius:"50px",
+                        boxShadow:'none', 
+                        color: '#fff',
                       }}
                     >
                       {loading ? "Loading..." : "Sign In"}
