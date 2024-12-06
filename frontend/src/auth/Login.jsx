@@ -8,6 +8,7 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
+import wm from '../assets/wm.png'
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +35,7 @@ const AdvancedLoginPage = () => {
         width: "100%",
         overflow: "hidden",
         position: "relative",
-        background: "linear-gradient(135deg, #6A11CB, #2575FC)",
+        background: "linear-gradient(135deg, #020202, #2575FC)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -68,14 +69,15 @@ const AdvancedLoginPage = () => {
             transition={{ duration: 0.8, type: "spring" }}
           >
             <Typography
-              variant="h3"
+              variant="h4"
               sx={{
                 color: "#fff",
                 fontWeight: "bold",
                 textShadow: "2px 4px 6px rgba(0,0,0,0.2)",
               }}
             >
-              Welcome to My App
+              <img src={wm} alt="" />
+              Welcome to WorkMax
             </Typography>
             <Typography
               variant="h6"
@@ -85,7 +87,7 @@ const AdvancedLoginPage = () => {
                 textShadow: "1px 2px 4px rgba(0,0,0,0.2)",
               }}
             >
-              Sign in to continue and explore the amazing features we offer.
+             Work Management Platform 
             </Typography>
           </motion.div>
         </Grid>
@@ -116,7 +118,7 @@ const AdvancedLoginPage = () => {
                     color: "#6A11CB",
                   }}
                 >
-                  Login
+                  Login 
                 </Typography>
 
                 <Box
@@ -126,7 +128,7 @@ const AdvancedLoginPage = () => {
                   sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                 >
                   <TextField
-                    label="Email Address"
+                    label="Employee ID"
                     variant="outlined"
                     type="email"
                     required
@@ -161,7 +163,7 @@ const AdvancedLoginPage = () => {
                     </Button>
                   </motion.div>
                 </Box>
-                <Typography
+                {/* <Typography
                   variant="body2"
                   sx={{
                     marginTop: 2,
@@ -180,7 +182,7 @@ const AdvancedLoginPage = () => {
                   >
                     Sign up
                   </a>
-                </Typography>
+                </Typography> */}
               </CardContent>
             </Card>
           </motion.div>
