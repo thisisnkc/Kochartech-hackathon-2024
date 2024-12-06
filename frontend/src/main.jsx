@@ -7,3 +7,7 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+ //add task, manage,reports
+  /*add task -> form
+  manage -> table
+  */
