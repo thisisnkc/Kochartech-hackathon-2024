@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import AdvancedLoginPage from "./auth/Login";
+import TaskScreen from "./tasks/TaskScreen";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-     <h1>hello</h1>
-       <h2>working</h2>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<AdvancedLoginPage/>} />
+        <Route path="/home" element={<TaskScreen/>} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
