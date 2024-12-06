@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:heyitsme@127.0.0.1:3306/workmax?schema=public"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  role      Role     @default(MANAGER)
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Task {
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String
+  priority    Priority    @default(LOW)
+  status      TaskStatus  @default(PENDING)
+  assignedTo  Json
+  createdBy   Json
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  taskImages  TaskImage[]
+  Rating      Int?
+}
+
+model TaskImage {
+  id        Int                 @id @default(autoincrement())
+  tasksId   Int
+  task      Task                @relation(fields: [tasksId], references: [id])
+  imagePath String
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  Status    ImageApprovalStatus @default(PENDING)
+}
+
+enum Role {
+  MANAGER
+  WORKER
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+}
+
+enum ImageApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
