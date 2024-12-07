@@ -30,6 +30,26 @@ app.get("/users", async (req, res) => {
   }
 });
 
+app.get("/tasks", async (req, res) => {
+  try {
+    const tasks = await prisma.task.findMany();
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({ error: "Failed to fetch tasks" });
+  }
+});
+
+app.get("/taskImages", async (req, res) => {
+  try {
+    const taskImages = await prisma.taskImage.findMany();
+    res.status(200).json(taskImages);
+  } catch (error) {
+    console.error("Error fetching task images:", error);
+    res.status(500).json({ error: "Failed to fetch task images" });
+  }
+});
+
 // API to create a new user
 app.post("/api/users/add", async (req, res) => {
   try {
