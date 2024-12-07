@@ -160,7 +160,7 @@ const AdvancedLoginPage = () => {
                   sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                 > 
                   <TextField
-                    label="eamil"
+                    label="Email"
                     variant="outlined"
                     type="text"
                     required
