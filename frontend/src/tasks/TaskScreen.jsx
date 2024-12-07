@@ -139,11 +139,7 @@ const TaskScreen = () => {
     setImage(null);
   };
 
-  const tasks = [
-    { id: 1, title: "Task 1", description: "Description for Task 1", priority: "High" },
-    { id: 2, title: "Task 2", description: "Description for Task 2", priority: "Medium" },
-    { id: 3, title: "Task 3", description: "Description for Task 3", priority: "Low" },
-  ];
+
 
   //  const declineCall = () => {
   //   // Dismiss the popup
