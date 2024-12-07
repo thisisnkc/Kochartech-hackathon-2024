@@ -1,3 +1,4 @@
+/* Base styles for mobile */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,79 +14,94 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* General Styles for Mobile Devices */
+@media (max-width: 600px) {
+  body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+  }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #010886;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  a {
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
   }
   a:hover {
-    color: #747bff;
+    color: #535bf2;
   }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-.logo {
-  width: 50%;
-  margin: auto;
-  display: flex;
-}
-.input-fields {
-  color: #fff;
-}
 
-.input-fields label {
-  color: rgb(255 255 255 / 50%);
-}
-.input-fields fieldset {
-  border-color: rgb(255 255 255 / 50%);
-}
-.input-fields div {
-  border-radius: 50px;
-}
-.input-fields input {
-  color: #fff;
-}
-.submitBtn {
-  background: linear-gradient(135deg, #1b1b1bd9, #0000007a);
+  h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+  }
+
+  button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+  }
+
+  button:hover {
+    border-color: #010886;
+  }
+
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+
+  .logo {
+    width: 50%;
+    margin: auto;
+    display: flex;
+  }
+
+  .input-fields {
+    color: #fff;
+  }
+
+  .input-fields label {
+    color: rgb(255 255 255 / 50%);
+  }
+
+  .input-fields fieldset {
+    border-color: rgb(255 255 255 / 50%);
+  }
+
+  .input-fields div {
+    border-radius: 50px;
+  }
+
+  .input-fields input {
+    color: #fff;
+  }
+
+  .submitBtn {
+    background: linear-gradient(135deg, #1b1b1bd9, #0000007a);
+  }
+
+  /* Media query for light mode */
+  @media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+
+    a:hover {
+      color: #747bff;
+    }
+
+    button {
+      background-color: #f9f9f9;
+    }
+  }
 }

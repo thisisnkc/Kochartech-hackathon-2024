@@ -15,19 +15,19 @@ import ImageIcon from "@mui/icons-material/Image";
 import EditIcon from "@mui/icons-material/Edit";
 
 const Manage = () => {
-  const [selectedPriority, setSelectedPriority] = useState("High");
+  const [selectedPriority, setSelectedPriority] = useState("HIGH");
 
   // Sample data for tasks
   const tasks = {
-    High: [
+    HIGH: [
       { name: "High Task 1", status: "Pending", assignedTo: "John Doe" },
       { name: "High Task 2", status: "Done", assignedTo: "Jane Smith" },
     ],
-    Medium: [
+    MEDIUM: [
       { name: "Medium Task 1", status: "Pending", assignedTo: "Alice Brown" },
       { name: "Medium Task 2", status: "Done", assignedTo: "Bob White" },
     ],
-    Low: [
+    LOW: [
       { name: "Low Task 1", status: "Pending", assignedTo: "Charlie Green" },
       { name: "Low Task 2", status: "Done", assignedTo: "Dana Black" },
     ],
@@ -41,7 +41,7 @@ const Manage = () => {
 
       {/* Priority Selection Buttons */}
       <Stack direction="row" spacing={2} mb={3}>
-        {["High", "Medium", "Low"].map((priority) => (
+        {["HIGH", "MEDIUM", "LOW"].map((priority) => (
           <Button
             key={priority}
             variant={selectedPriority === priority ? "contained" : "outlined"}
