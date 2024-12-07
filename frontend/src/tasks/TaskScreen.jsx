@@ -12,7 +12,9 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
-
+import FlagIcon from "@mui/icons-material/Flag";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 const TaskScreen = () => {
   const [taskStates, setTaskStates] = useState({
     1: "Pending",
@@ -64,22 +66,23 @@ const TaskScreen = () => {
       id: 1,
       title: "Task 1",
       description: "Description for Task 1",
-      priority: "High",
+      priority: "",
     },
     {
       id: 2,
       title: "Task 2",
       description: "Description for Task 2",
-      priority: "Medium",
+      priority: "",
     },
     {
       id: 3,
       title: "Task 3",
       description: "Description for Task 3",
-      priority: "Low",
+      priority: "",
     },
   ];
 
+  const percentage = 75;
   return (
     <Box
       sx={{
@@ -95,23 +98,26 @@ const TaskScreen = () => {
         sx={{
           textAlign: "center",
           fontWeight: "bold",
-          marginBottom: "2rem",
+          // marginBottom: "2rem",
           textShadow: "2px 4px 6px rgba(0,0,0,0.3)",
         }}
       >
         Today's Recap
+        <div className="progressBar">
+          <CircularProgressbar value={percentage} text={`${percentage}%`} />
+        </div>
       </Typography>
       <div className="recap">
-        <div>
-          <h2>
+        <div style={{ textAlign: "center" }}>
+          <h1>
             6<span> Tasks</span>
-          </h2>
+          </h1>
           <h3>Scheduled</h3>
         </div>
-        <div>
-          <h2>
+        <div style={{ textAlign: "center" }}>
+          <h1>
             4<span> Tasks</span>
-          </h2>
+          </h1>
           <h3>Done</h3>
         </div>
       </div>
@@ -153,6 +159,7 @@ const TaskScreen = () => {
               >
                 {task.priority}
               </Typography>
+              <FlagIcon></FlagIcon>
             </AccordionSummary>
             <AccordionDetails>
               <Typography

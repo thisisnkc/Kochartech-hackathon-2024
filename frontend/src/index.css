@@ -96,8 +96,8 @@
   .recap span {
     font-size: 16px;
   }
-  .recap h2 {
-    margin-bottom: 0px;
+  .recap h1 {
+    margin: 0px;
   }
   .recap h3 {
     margin-top: 0px;
@@ -107,6 +107,11 @@
   }
   .MuiAccordionSummary-content p {
     color: #071122;
+  }
+  .progressBar {
+    margin: auto;
+    margin-top: 20px;
+    width: 80%;
   }
   /* Media query for light mode */
   @media (prefers-color-scheme: light) {

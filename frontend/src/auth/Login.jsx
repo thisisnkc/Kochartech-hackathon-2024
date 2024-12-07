@@ -8,17 +8,16 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import wm from '../assets/WM.png'
+import wm from "../assets/WM.png";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import '../index.css';
-
+import "../index.css";
 
 const AdvancedLoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [password,setPassword] = useState();
-  const [email,setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -28,7 +27,7 @@ const AdvancedLoginPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password}),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -37,22 +36,19 @@ const AdvancedLoginPage = () => {
       }
 
       const data = await response.json();
-      const details =data.existingUser;
+      const details = data.existingUser;
       console.log(details);
-      localStorage.setItem('userInfo',JSON.stringify(details));
-            if(details.role === "MANAGER"){
-               await navigate("/dashboard");
-            }
-            else if(details.role === "WORKER"){
-                await navigate('/home');
-            }
-    //   setMessage(`Welcome, ${data.existingUser.email}`);
+      localStorage.setItem("userInfo", JSON.stringify(details));
+      if (details.role === "MANAGER") {
+        await navigate("/dashboard");
+      } else if (details.role === "WORKER") {
+        await navigate("/home");
+      }
+      //   setMessage(`Welcome, ${data.existingUser.email}`);
     } catch (error) {
-    //   setMessage(`Error: ${error.message}`);
-    console.log(error);
+      //   setMessage(`Error: ${error.message}`);
+      console.log(error);
     }
-  
-   
   };
   //add task, manage,reports
   /*add task -> form
@@ -80,7 +76,8 @@ const AdvancedLoginPage = () => {
           position: "absolute",
           width: "100%",
           height: "100%",
-          background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
           zIndex: 1,
         }}
       ></motion.div>
@@ -104,7 +101,8 @@ const AdvancedLoginPage = () => {
               variant="h4"
               sx={{
                 color: "#fff",
-                fontWeight: "bold", textAlign:'center',
+                fontWeight: "bold",
+                textAlign: "center",
                 textShadow: "2px 4px 6px rgba(0,0,0,0.2)",
               }}
             >
@@ -136,8 +134,8 @@ const AdvancedLoginPage = () => {
                 borderRadius: "35px",
                 boxShadow: "0px 15px 30px rgba(0,0,0,0.3)",
                 backdropFilter: "blur(10px)",
-                backgroundColor: "rgba(0, 0, 0, 0.23)",
-                color:'#fff'
+                backgroundColor: "rgba(0, 0, 0, 0.20)",
+                color: "#fff",
               }}
             >
               <CardContent>
@@ -158,7 +156,7 @@ const AdvancedLoginPage = () => {
                   noValidate
                   autoComplete="off"
                   sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                > 
+                >
                   <TextField
                     label="Email"
                     variant="outlined"
@@ -197,9 +195,9 @@ const AdvancedLoginPage = () => {
                         height: "50px",
                         textTransform: "uppercase",
                         fontSize: "16px",
-                        borderRadius:"50px",
-                        boxShadow:'none', 
-                        color: '#fff',
+                        borderRadius: "50px",
+                        boxShadow: "none",
+                        color: "#fff",
                       }}
                     >
                       {loading ? "Loading..." : "Sign In"}
