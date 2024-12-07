@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CallIcon from "@mui/icons-material/Call";
 import ImageIcon from "@mui/icons-material/Image";
 import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
 
 const Manage = () => {
   const [selectedPriority, setSelectedPriority] = useState("HIGH");
@@ -22,7 +23,7 @@ const Manage = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   // Fetch tasks from the API
   useEffect(() => {
     const fetchTasks = async () => {
@@ -44,6 +45,10 @@ const Manage = () => {
 
     fetchTasks();
   }, []);
+  const navigateToPhygital = async () => {
+    console.log("call clicked");
+        // await navigate("/login");
+  };
 
   // Filter tasks by priority when selectedPriority changes
   useEffect(() => {
@@ -111,7 +116,9 @@ const Manage = () => {
                 {task.description}
               </Typography>
               <Stack direction="row" spacing={2}>
-                <IconButton color="primary" aria-label="call">
+                <IconButton color="primary" aria-label="call"  onClick={ async ()=>{
+                      window.open("/meetings", "_blank", "noopener,noreferrer");
+                }}>
                   <CallIcon />
                 </IconButton>
                 <Button variant="outlined">Verify image</Button>
