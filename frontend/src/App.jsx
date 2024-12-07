@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import AdvancedLoginPage from "./auth/Login";
 import TaskScreen from "./tasks/TaskScreen";
 import Dashboard from "./manager_screens/Dashboard";
+import JitsiAudioCall from "./Jitsi";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/login" element={<AdvancedLoginPage/>} />
         <Route path="/home" element={<TaskScreen/>} />
         <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/meetings" element={<JitsiAudioCall/>} />
 
       </Routes>
     </Router>

@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from "react";
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -14,6 +15,8 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
+import { io } from "socket.io-client";
+
 
 const TaskScreen = () => {
   const [tasks, setTasks] = useState([]);
@@ -21,6 +24,28 @@ const TaskScreen = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [image, setImage] = useState(null);
+
+  const jitsiContainerRef = useRef(null);
+  const [incomingCall, setIncomingCall] = useState(null);
+
+  // const socket = io("http://localhost:3000", { transports: ["websockets"] });
+
+
+  // useEffect(() => {
+  //   // Listen for incoming calls
+  //   socket.on("incomingCall", ({ from, roomName }) => {
+  //     console.log("Incoming call from:", from);
+  //     setIncomingCall({ from, roomName });
+  //   });
+  // }, [socket]);
+
+  // const acceptCall = () => {
+  //   if (!incomingCall) return;
+
+  //   // Join the specified Jitsi room
+  //   initJitsi(incomingCall.roomName);
+  //   setIncomingCall(null);
+  // };
 
   const theme = useTheme();
 
@@ -114,6 +139,33 @@ const TaskScreen = () => {
     setImage(null);
   };
 
+  const tasks = [
+    { id: 1, title: "Task 1", description: "Description for Task 1", priority: "High" },
+    { id: 2, title: "Task 2", description: "Description for Task 2", priority: "Medium" },
+    { id: 3, title: "Task 3", description: "Description for Task 3", priority: "Low" },
+  ];
+
+  //  const declineCall = () => {
+  //   // Dismiss the popup
+  //   setIncomingCall(null);
+  // };
+
+  // const initJitsi = (roomName) => {
+  //   if (!window.JitsiMeetExternalAPI) {
+  //     console.error("Jitsi Meet API script not loaded");
+  //     return;
+  //   }
+
+  //   const domain = "join-meet.maxicus.com";
+  //   const options = {
+  //     roomName,
+  //     parentNode: jitsiContainerRef.current,
+  //     userInfo: { displayName: "Recipient" },
+  //   };
+
+  //   new window.JitsiMeetExternalAPI(domain, options);
+  // };
+
   return (
     <Box
       sx={{
@@ -122,6 +174,20 @@ const TaskScreen = () => {
         padding: "2rem",
       }}
     >
+        {/* <div style={styles.popup}>
+          <div style={styles.popupContent}>
+            <h3>Incoming Call</h3>
+            <p>From: {incomingCall.from}</p>
+            <div style={styles.buttonContainer}>
+              <button onClick={acceptCall} style={styles.acceptButton}>
+                Accept
+              </button>
+              <button onClick={declineCall} style={styles.declineButton}>
+                Decline
+              </button>
+            </div>
+          </div>
+        </div> */}
       <Typography
         variant="h3"
         sx={{
@@ -241,8 +307,55 @@ const TaskScreen = () => {
           </Button>
         </Paper>
       </Modal>
+      {/* <div
+        ref={jitsiContainerRef}
+        style={{ width: "100%", height: "100vh", display: incomingCall ? "none" : "block" }}
+      ></div> */}
     </Box>
   );
 };
+
+// const styles = {
+//   popup: {
+//     position: "fixed",
+//     top: 0,
+//     left: 0,
+//     width: "100%",
+//     height: "100%",
+//     backgroundColor: "rgba(0, 0, 0, 0.7)",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     zIndex: 1000,
+//   },
+//   popupContent: {
+//     backgroundColor: "#fff",
+//     padding: "20px",
+//     borderRadius: "10px",
+//     textAlign: "center",
+//     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+//   },
+//   buttonContainer: {
+//     display: "flex",
+//     justifyContent: "space-around",
+//     marginTop: "20px",
+//   },
+//   acceptButton: {
+//     backgroundColor: "#4CAF50",
+//     color: "#fff",
+//     padding: "10px 20px",
+//     border: "none",
+//     borderRadius: "5px",
+//     cursor: "pointer",
+//   },
+//   declineButton: {
+//     backgroundColor: "#F44336",
+//     color: "#fff",
+//     padding: "10px 20px",
+//     border: "none",
+//     borderRadius: "5px",
+//     cursor: "pointer",
+//   },
+// };
 
 export default TaskScreen;
