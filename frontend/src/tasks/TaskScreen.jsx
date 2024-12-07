@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -7,21 +7,47 @@ import {
   AccordionDetails,
   Button,
   Modal,
-  Input,
+  TextField,
   IconButton,
+  Paper,
+  useTheme,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 
 const TaskScreen = () => {
-  const [taskStates, setTaskStates] = useState({
-    1: "Pending",
-    2: "Pending",
-    3: "Pending",
-  });
+  const [tasks, setTasks] = useState([]);
+  const [taskStates, setTaskStates] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [image, setImage] = useState(null);
+
+  const theme = useTheme();
+
+  // Fetch tasks from the API
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/tasks");
+        if (!response.ok) {
+          throw new Error("Failed to fetch tasks");
+        }
+        const data = await response.json();
+        setTasks(data);
+
+        // Initialize task states dynamically based on fetched tasks
+        const initialTaskStates = {};
+        data.forEach((task) => {
+          initialTaskStates[task.id] = task.status || "Pending";
+        });
+        setTaskStates(initialTaskStates);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   const handleStateChange = (taskId) => {
     setTaskStates((prevState) => {
@@ -30,14 +56,10 @@ const TaskScreen = () => {
 
       if (currentState === "Pending") {
         newState = "In Progress";
-        console.log(`Task ${taskId} is now in progress`);
       } else if (currentState === "In Progress") {
         newState = "Done";
-        console.log(`Task ${taskId} is now done`);
-        setSelectedTaskId(taskId);  // Track which task was marked as done
-        setOpenModal(true);  // Open the modal for image upload
-      } else if (currentState === "Done") {
-        console.log(`Task ${taskId} is already completed`);
+        setSelectedTaskId(taskId);
+        setOpenModal(true);
       }
 
       return {
@@ -50,28 +72,54 @@ const TaskScreen = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));  // Create an object URL for the image
+      setImage(file); // Store the file object
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!image || !selectedTaskId) {
+      alert("Please select an image and a task before submitting.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", image); // Attach the image file
+    formData.append("taskId", selectedTaskId); // Attach the taskId
+
+    try {
+      const response = await fetch("http://localhost:3000/api/tasks/images/add", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const data = await response.json();
+      console.log("Image uploaded successfully:", data);
+
+      // Reset modal state
+      setOpenModal(false);
+      setImage(null);
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
     }
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setImage(null);  // Reset the image when closing the modal
+    setImage(null);
   };
-
-  const tasks = [
-    { id: 1, title: "Task 1", description: "Description for Task 1", priority: "High" },
-    { id: 2, title: "Task 2", description: "Description for Task 2", priority: "Medium" },
-    { id: 3, title: "Task 3", description: "Description for Task 3", priority: "Low" },
-  ];
 
   return (
     <Box
       sx={{
         minHeight: "100vh",
+        background: "linear-gradient(135deg, #eef2f3, #8e9eab)",
         padding: "2rem",
-        background: "linear-gradient(135deg, #FF9A8B, #FF6A88, #FF99AC)",
-        color: "#fff",
       }}
     >
       <Typography
@@ -79,45 +127,33 @@ const TaskScreen = () => {
         sx={{
           textAlign: "center",
           fontWeight: "bold",
-          marginBottom: "2rem",
-          textShadow: "2px 4px 6px rgba(0,0,0,0.3)",
+          color: theme.palette.primary.main,
+          mb: 4,
         }}
       >
-        Task Screen
+        Task Management
       </Typography>
       {tasks.map((task) => (
         <Accordion
           key={task.id}
           sx={{
-            marginBottom: "1rem",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            backgroundColor: "#ffffff",
             borderRadius: "8px",
-            overflow: "hidden",
+            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+            mb: 2,
+            "&:before": { display: "none" },
           }}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              "& .MuiAccordionSummary-content": {
-                flexGrow: 1,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              },
-            }}
+            expandIcon={<ExpandMoreIcon sx={{ color: theme.palette.primary.main }} />}
           >
-            <Typography sx={{ fontWeight: "bold", color: "#FF6A88" }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold", flexGrow: 1 }}>
               {task.title}
             </Typography>
             <Typography
               sx={{
-                color: "#FF6A88",
-                fontSize: "0.9rem",
+                color: theme.palette.secondary.main,
                 fontWeight: "bold",
-                marginLeft: "1rem",
               }}
             >
               {task.priority}
@@ -125,28 +161,25 @@ const TaskScreen = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Typography
-              sx={{
-                color: "#333",
-                marginBottom: "1rem",
-              }}
+              variant="body2"
+              sx={{ color: "text.secondary", mb: 2 }}
             >
               {task.description}
             </Typography>
             <Button
               variant="contained"
-              color={
-                taskStates[task.id] === "Pending"
-                  ? "warning"
-                  : taskStates[task.id] === "In Progress"
-                  ? "primary"
-                  : "success"
-              }
               onClick={() => handleStateChange(task.id)}
               sx={{
                 textTransform: "uppercase",
                 fontWeight: "bold",
-                fontSize: "14px",
               }}
+              color={
+                taskStates[task.id] === "Pending"
+                  ? "warning"
+                  : taskStates[task.id] === "In Progress"
+                  ? "info"
+                  : "success"
+              }
             >
               {taskStates[task.id]}
             </Button>
@@ -158,61 +191,55 @@ const TaskScreen = () => {
       <Modal
         open={openModal}
         onClose={handleCloseModal}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <Box
+        <Paper
           sx={{
-            backgroundColor: "white",
-            padding: "2rem",
+            p: 4,
+            width: "90%",
+            maxWidth: "400px",
             borderRadius: "8px",
-            width: "400px",
-            textAlign: "center",
+            boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)",
+            position: "relative",
           }}
         >
           <IconButton
             onClick={handleCloseModal}
-            sx={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-            }}
+            sx={{ position: "absolute", top: 8, right: 8 }}
           >
             <CloseIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
+          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
             Task Completed - Upload Image
           </Typography>
-          <Input
+          <TextField
             type="file"
+            fullWidth
             onChange={handleImageUpload}
-            sx={{
-              marginBottom: "1rem",
-              border: "1px solid #ddd",
-              padding: "8px",
-              borderRadius: "4px",
+            InputProps={{
+              inputProps: { accept: "image/*" },
             }}
+            sx={{ mb: 2 }}
           />
           {image && (
-            <Box sx={{ marginBottom: "1rem" }}>
-              <img src={image} alt="Uploaded Task" width="100%" />
+            <Box sx={{ mb: 2 }}>
+              <Typography sx={{ mb: 1 }}>Preview:</Typography>
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Uploaded Task"
+                style={{ width: "100%" }}
+              />
             </Box>
           )}
           <Button
             variant="contained"
             color="success"
-            onClick={handleCloseModal}
-            sx={{
-              textTransform: "uppercase",
-              fontWeight: "bold",
-            }}
+            fullWidth
+            onClick={handleSubmit} // Call the submit function
           >
             Submit
           </Button>
-        </Box>
+        </Paper>
       </Modal>
     </Box>
   );
