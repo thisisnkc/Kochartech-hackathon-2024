@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -15,7 +14,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
 
 const TaskScreen = () => {
@@ -24,9 +23,10 @@ const TaskScreen = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [image, setImage] = useState(null);
+  const [imgSrc, setImgSrc] = useState(null);
 
-  const jitsiContainerRef = useRef(null);
-  const [incomingCall, setIncomingCall] = useState(null);
+  // const jitsiContainerRef = useRef(null);
+  // const [incomingCall, setIncomingCall] = useState(null);
 
   // const socket = io("http://localhost:3000", { transports: ["websockets"] });
 
@@ -122,6 +122,7 @@ const TaskScreen = () => {
       }
 
       const data = await response.json();
+      setImgSrc(data.imagePath);
       console.log("Image uploaded successfully:", data);
 
       // Reset modal state
@@ -245,6 +246,11 @@ const TaskScreen = () => {
             >
               {taskStates[task.id]}
             </Button>
+            { task.taskImages.length > 0 && <img
+              src={task.taskImages[task.taskImages.length - 1 ].imagePath}
+              alt="Uploaded Image"
+              style={{ maxWidth: "100%", marginTop: "1rem" }}
+            />}
           </AccordionDetails>
         </Accordion>
       ))}

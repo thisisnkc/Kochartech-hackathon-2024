@@ -10,11 +10,38 @@ import {
   Stack,
   CircularProgress,
   Alert,
+    Modal,
+    TextField,
+    Paper,
+    useTheme,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CallIcon from "@mui/icons-material/Call";
 import ImageIcon from "@mui/icons-material/Image";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
+import Rating from '@mui/material/Rating';
+import StarIcon from '@mui/icons-material/Star';
+
+
+const labels = {
+  0.5: 'Useless',
+  1: 'Useless+',
+  1.5: 'Poor',
+  2: 'Poor+',
+  2.5: 'Ok',
+  3: 'Ok+',
+  3.5: 'Good',
+  4: 'Good+',
+  4.5: 'Excellent',
+  5: 'Excellent+',
+};
+
+function getLabelText(value) {
+  return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+}
+
+
 
 const Manage = () => {
   const [selectedPriority, setSelectedPriority] = useState("HIGH");
@@ -22,6 +49,13 @@ const Manage = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  // const [setSelectedTaskId, setSelectedTaskId] = useState(null);
+  const [imgSrc, setImgSrc] = useState(null);
+
+  const [value, setValue] = React.useState(2);
+  const [hover, setHover] = React.useState(-1);
+
 
   // Fetch tasks from the API
   useEffect(() => {
@@ -44,6 +78,11 @@ const Manage = () => {
 
     fetchTasks();
   }, []);
+
+    const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
 
   // Filter tasks by priority when selectedPriority changes
   useEffect(() => {
@@ -114,7 +153,10 @@ const Manage = () => {
                 <IconButton color="primary" aria-label="call">
                   <CallIcon />
                 </IconButton>
-                <Button variant="outlined">Verify image</Button>
+                <Button onClick={() => {
+                  // setSelectedTaskId(task.id);
+                  setImgSrc(task.taskImages[task.taskImages.length - 1 || 0].imagePath);
+                  setOpenModal(true)}} variant="outlined">Verify image</Button>
                 <IconButton color="primary" aria-label="edit task">
                   <EditIcon />
                 </IconButton>
@@ -127,6 +169,53 @@ const Manage = () => {
           No tasks available for this priority.
         </Typography>
       )}
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Paper
+          sx={{
+            p: 4,
+            width: "90%",
+            maxWidth: "400px",
+            borderRadius: "8px",
+            boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)",
+            position: "relative",
+          }}
+        >
+          <IconButton
+            onClick={handleCloseModal}
+            sx={{ position: "absolute", top: 8, right: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+            Task Completed 
+          </Typography>
+          <img
+                src={imgSrc}
+                alt="Uploaded Task"
+                style={{ width: "100%" }}
+              />
+        <Rating
+        name="hover-feedback"
+        value={value}
+        precision={0.5}
+        getLabelText={getLabelText}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        onChangeActive={(event, newHover) => {
+          setHover(newHover);
+        }}
+        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+      />
+      {value !== null && (
+        <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+      )}
+        </Paper>
+      </Modal>
     </Box>
   );
 };

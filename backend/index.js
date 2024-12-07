@@ -70,13 +70,45 @@ app.get("/users", async (req, res) => {
 
 app.get("/tasks", async (req, res) => {
   try {
-    const tasks = await prisma.task.findMany();
+    const tasks = await prisma.task.findMany({
+      select:{
+        taskImages:{
+          select: {
+            id: true,
+            imagePath: true,
+          }
+        },
+        id: true,
+        title: true,
+        description: true,
+        priority: true,
+        assignedTo: true,
+        createdBy: true,
+        status: true
+      }
+    });
     res.status(200).json(tasks);
   } catch (error) {
     console.error("Error fetching tasks:", error);
     res.status(500).json({ error: "Failed to fetch tasks" });
   }
 });
+
+app.put("/tasks/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating } = req.body;
+
+    const updatedTask = await prisma.task.update({
+      where: { id: +id },
+      data: { Rating },
+    });
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({ error: "Failed to update task" });
+  }
+})
 
 app.get("/taskImages", async (req, res) => {
   try {
@@ -178,7 +210,7 @@ app.post("/api/tasks/add", async (req, res) => {
   const upload = multer({
     storage: multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Save files to "uploads" folder
+        cb(null, "/home/nikhilkumar/Git/Kochartech-hackathon-2024/frontend/public/uploads/"); // Save files to "uploads" folder
       },
       filename: (req, file, cb) => {
         const uniqueName = `image_${Date.now()}${path.extname(file.originalname)}`;
