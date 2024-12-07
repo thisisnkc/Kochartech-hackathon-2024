@@ -42,6 +42,7 @@ function getLabelText(value) {
 }
 
 
+import { useNavigate } from "react-router-dom";
 
 const Manage = () => {
   const [selectedPriority, setSelectedPriority] = useState("HIGH");
@@ -56,7 +57,7 @@ const Manage = () => {
   const [value, setValue] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
 
-
+  const navigate = useNavigate();
   // Fetch tasks from the API
   useEffect(() => {
     const fetchTasks = async () => {
@@ -83,6 +84,10 @@ const Manage = () => {
     setOpenModal(false);
   };
 
+  const navigateToPhygital = async () => {
+    console.log("call clicked");
+        // await navigate("/login");
+  };
 
   // Filter tasks by priority when selectedPriority changes
   useEffect(() => {
@@ -150,7 +155,9 @@ const Manage = () => {
                 {task.description}
               </Typography>
               <Stack direction="row" spacing={2}>
-                <IconButton color="primary" aria-label="call">
+                <IconButton color="primary" aria-label="call"  onClick={ async ()=>{
+                      window.open("/meetings", "_blank", "noopener,noreferrer");
+                }}>
                   <CallIcon />
                 </IconButton>
                 <Button onClick={() => {
