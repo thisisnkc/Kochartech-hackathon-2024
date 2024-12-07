@@ -10,6 +10,44 @@ const app = express();
 const prisma = new PrismaClient();
 const PORT = 3000;
 
+const http = require("http");
+const { Server } = require("socket.io");
+
+const server = http.createServer(app);
+
+
+const io = new Server(server , {
+  transports: ["websockets"],
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
+  // Listen for call initiation
+  socket.on("callUser", ({ to, roomName }) => {
+    console.log(`Call initiated to ${to} for room ${roomName}`);
+    // Notify the recipient
+    io.to(to).emit("incomingCall", { from: socket.id, roomName });
+  });
+
+  // Join a specific room
+  socket.on("joinRoom", (roomName) => {
+    socket.join(roomName);
+    console.log(`${socket.id} joined room ${roomName}`);
+  });
+
+  // Handle disconnection
+  socket.on("disconnect", () => {
+    console.log("A user disconnected:", socket.id);
+  });
+});
+
+
+
 // Middleware to parse JSON
 app.use(cors({ origin: "*" }));
 app.use(express.json());
